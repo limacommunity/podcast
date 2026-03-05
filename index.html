@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Lima Community Church Podcast</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 760px; margin: 20px auto; padding: 0 16px; color: #222; }
+    .episode { border-bottom: 1px solid #ddd; padding: 20px 0; }
+    .episode h3 { margin: 0 0 6px; font-size: 20px; font-weight: bold; }
+    .date { color: #666; margin-bottom: 10px; font-size: 14px; }
+    audio { width: 100%; margin-bottom: 10px; }
+    .download { color: #0066cc; text-decoration: none; font-size: 14px; }
+    #load-more { display: block; margin: 24px auto; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <h2>Lima Community Church Podcast</h2>
+  <div id="episodes"></div>
+  <button id="load-more">Load More Episodes</button>
+
+  <script>
+    const FEED = "https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.limacommunitychurch.com/podcast?format=rss");
+    let items = [];
+    let index = 0;
+    const perPage = 5;
+
+    function render() {
+      const container = document.getElementById("episodes");
+      const slice = items.slice(index, index + perPage);
+
+      slice.forEach(ep => {
+        const div = document.createElement("div");
+        div.className = "episode";
+        div.innerHTML = `
+          <h3>${ep.title}</h3>
+          <div class="date">${ep.date}</div>
+          <audio controls>
+            <source src="${ep.audio}" type="audio/mpeg">
+          </audio>
+          <a class="download" href="${ep.audio}" download>Download</a>
+        `;
+        container.appendChild(div);
+      });
+
+      index += perPage;
+      if (index >= items.length) {
+        document.getElementById("load-more").style.display = "none";
+      }
+    }
+
+    fetch(FEED)
+      .then(r => r.text())
+      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+      .then(xml => {
+        const raw = [...xml.querySelectorAll("item")];
+        items = raw.map(item => ({
+          title: item.querySelector("title")?.textContent || "Untitled",
+          date: new Date(item.querySelector("pubDate")?.textContent).toLocaleDateString(),
+          audio: item.querySelector("enclosure")?.getAttribute("url")
+        })).filter(ep => ep.audio);
+        render();
+      })
+      .catch(err => {
+        document.getElementById("episodes").innerHTML = "<p style='color:red;'>Unable to load podcast feed.</p>";
+        console.error(err);
+      });
+
+    document.getElementById("load-more").addEventListener("click", render);
+  </script>
+
+</body>
+</html>
