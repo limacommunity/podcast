@@ -18,7 +18,7 @@
 
     /* blank header space (≈3 lines) */
     .header-spacer {
-      height: 60px;
+      height: 100px;
     }
 
     h2 {
@@ -50,14 +50,18 @@
       margin-bottom: 10px;
     }
 
-    /* thinner progress bar (WebKit browsers) */
-    audio::-webkit-media-controls-timeline {
-      height: 4px !important;
-    }
+/* thinner, visible progress bar */
+audio::-webkit-media-controls-timeline {
+  height: 6px !important;        /* slim but visible */
+  background-color: #444 !important;
+  border-radius: 4px !important;
+}
 
-    audio::-webkit-media-controls-panel {
-      background-color: #000;
-    }
+/* restore default control panel so it no longer blends into black */
+audio::-webkit-media-controls-panel {
+  background-color: #111 !important;   /* subtle dark gray instead of pure black */
+}
+
 
     .download {
       color: #66aaff;
