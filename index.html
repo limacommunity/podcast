@@ -4,25 +4,92 @@
   <meta charset="utf-8" />
   <title>Lima Community Church Podcast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
-    body { font-family: Arial, sans-serif; max-width: 760px; margin: 20px auto; padding: 0 16px; color: #222; }
-    .episode { border-bottom: 1px solid #ddd; padding: 20px 0; }
-    .episode h3 { margin: 0 0 6px; font-size: 20px; font-weight: bold; }
-    .date { color: #666; margin-bottom: 10px; font-size: 14px; }
-    audio { width: 100%; margin-bottom: 10px; }
-    .download { color: #0066cc; text-decoration: none; font-size: 14px; }
-    #load-more { display: block; margin: 24px auto; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 760px;
+      margin: 20px auto;
+      padding: 0 16px;
+      color: #222;
+      background-color: #000;
+      text-align: center;
+    }
+
+    /* blank header space (≈3 lines) */
+    .header-spacer {
+      height: 60px;
+    }
+
+    h2 {
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .episode {
+      border-bottom: 1px solid #444;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .episode h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .date {
+      color: #ccc;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    audio {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    /* thinner progress bar (WebKit browsers) */
+    audio::-webkit-media-controls-timeline {
+      height: 4px !important;
+    }
+
+    audio::-webkit-media-controls-panel {
+      background-color: #000;
+    }
+
+    .download {
+      color: #66aaff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    #load-more {
+      display: block;
+      margin: 24px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #222;
+      color: white;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
   </style>
 </head>
+
 <body>
 
+  <div class="header-spacer"></div>
+
   <h2>Lima Community Church Podcast</h2>
+
   <div id="episodes"></div>
   <button id="load-more">Load More Episodes</button>
 
   <script>
-   const FEED = "https://corsproxy.io/?" + encodeURIComponent("https://www.limacommunitychurch.com/podcast?format=rss");
-
+    const FEED = "https://corsproxy.io/?" + encodeURIComponent("https://www.limacommunitychurch.com/podcast?format=rss");
     let items = [];
     let index = 0;
     const perPage = 5;
@@ -64,7 +131,8 @@
         render();
       })
       .catch(err => {
-        document.getElementById("episodes").innerHTML = "<p style='color:red;'>Unable to load podcast feed.</p>";
+        document.getElementById("episodes").innerHTML =
+          "<p style='color:red;'>Unable to load podcast feed.</p>";
         console.error(err);
       });
 
